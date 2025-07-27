@@ -1,0 +1,262 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Indicraft Design System - Earthy Indian Colors */
+    --background: 48 20% 97%; /* Warm cream */
+    --foreground: 25 35% 15%; /* Deep brown */
+
+    --card: 48 30% 95%; /* Soft cream */
+    --card-foreground: 25 35% 15%;
+
+    --popover: 48 30% 95%;
+    --popover-foreground: 25 35% 15%;
+
+    /* Terracotta primary */
+    --primary: 14 65% 45%; /* Rich terracotta */
+    --primary-foreground: 48 20% 97%;
+
+    /* Mustard secondary */
+    --secondary: 45 85% 65%; /* Mustard yellow */
+    --secondary-foreground: 25 35% 15%;
+
+    --muted: 48 15% 90%; /* Light warm grey */
+    --muted-foreground: 25 20% 35%;
+
+    /* Deep red accent */
+    --accent: 0 75% 35%; /* Deep Indian red */
+    --accent-foreground: 48 20% 97%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 48 20% 97%;
+
+    --border: 48 15% 85%; /* Warm border */
+    --input: 48 15% 85%;
+    --ring: 14 65% 45%; /* Terracotta ring */
+
+    /* Custom Indicraft tokens */
+    --terracotta: 14 65% 45%;
+    --terracotta-light: 14 45% 65%;
+    --mustard: 45 85% 65%;
+    --deep-red: 0 75% 35%;
+    --warm-cream: 48 20% 97%;
+    --earth-brown: 25 35% 15%;
+    
+    /* Gradients */
+    --gradient-warm: linear-gradient(135deg, hsl(var(--terracotta)), hsl(var(--mustard)));
+    --gradient-earth: linear-gradient(180deg, hsl(var(--warm-cream)), hsl(var(--muted)));
+    --gradient-heritage: linear-gradient(135deg, hsl(var(--deep-red)), hsl(var(--terracotta)));
+    
+    /* Shadows */
+    --shadow-warm: 0 10px 30px -10px hsl(var(--terracotta) / 0.2);
+    --shadow-soft: 0 4px 15px -3px hsl(var(--earth-brown) / 0.1);
+    
+    /* Animations */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-gentle: all 0.3s ease-out;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Professional dark theme similar to ChatGPT */
+    --background: 212 100% 2%; /* Very dark blue-black */
+    --foreground: 0 0% 95%; /* Almost white text */
+
+    --card: 216 100% 4%; /* Slightly lighter dark */
+    --card-foreground: 0 0% 95%;
+
+    --popover: 216 100% 4%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 14 65% 55%; /* Bright terracotta for visibility */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 217 15% 12%; /* Dark grey for secondary */
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 217 15% 8%; /* Very dark muted */
+    --muted-foreground: 0 0% 70%; /* Light grey for muted text */
+
+    --accent: 217 15% 15%; /* Slightly lighter for accents */
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 217 15% 12%; /* Dark borders */
+    --input: 217 15% 8%; /* Dark input backgrounds */
+    --ring: 14 65% 55%; /* Bright terracotta for focus */
+    
+    /* Chat-specific dark tokens */
+    --chat-user-bg: 217 15% 15%;
+    --chat-bot-bg: 216 100% 4%;
+    --chat-sidebar-bg: 212 100% 1%;
+    --chat-hover: 217 15% 20%;
+    
+    --sidebar-background: 212 100% 1%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 14 65% 55%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 217 15% 8%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 217 15% 12%;
+    --sidebar-ring: 14 65% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .bg-checkerboard {
+    background-image: 
+      linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+      linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+      linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+
+  /* Mobile-optimized animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  /* Mobile touch improvements */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  /* Better mobile scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mobile viewport height fix */
+  .min-h-screen-mobile {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+  /* Improve text readability on mobile */
+  @media (max-width: 768px) {
+    .text-balance {
+      text-wrap: balance;
+    }
+  }
+
+  /* Chat specific responsive fixes */
+  .chat-container {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    overflow: hidden;
+  }
+
+  /* Ensure proper text color inheritance */
+  .chat-input {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  /* Fix mobile chat layout */
+  @media (max-width: 768px) {
+    .chat-sidebar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 50;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .chat-sidebar.open {
+      transform: translateX(0);
+    }
+  }
+
+  /* Animation improvements */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes scaleIn {
+    from { 
+      opacity: 0; 
+      transform: scale(0.95); 
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1); 
+    }
+  }
+
+  @keyframes slideInLeft {
+    from { 
+      transform: translateX(-100%); 
+    }
+    to { 
+      transform: translateX(0); 
+    }
+  }
+}

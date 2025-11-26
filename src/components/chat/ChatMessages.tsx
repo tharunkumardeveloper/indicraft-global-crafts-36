@@ -79,7 +79,7 @@ export const ChatMessages = ({ messages, isTyping }: ChatMessagesProps) => {
                     <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-background"></div>
                   </div>
                 ) : (
-                  <div className="w-9 h-9 bg-gradient-warm rounded-full flex items-center justify-center shadow-md">
+                  <div className="w-9 h-9 bg-primary rounded-full flex items-center justify-center shadow-md">
                     <span className="text-white text-xs font-medium">You</span>
                   </div>
                 )}
@@ -90,8 +90,8 @@ export const ChatMessages = ({ messages, isTyping }: ChatMessagesProps) => {
                 <div
                   className={`p-4 rounded-2xl shadow-sm border transition-all duration-300 hover:shadow-md ${
                     message.sender === 'user'
-                      ? 'bg-gradient-warm text-white rounded-tr-sm border-primary/20'
-                      : 'bg-background border-border rounded-tl-sm hover:bg-muted/50'
+                      ? 'bg-primary text-white rounded-tr-sm border-primary/20'
+                      : 'bg-card text-foreground border border-border rounded-tl-sm'
                   }`}
                 >
                   {message.hasImage && message.imageUrl && (
@@ -123,6 +123,15 @@ export const ChatMessages = ({ messages, isTyping }: ChatMessagesProps) => {
         ))}
         
         {/* Typing Indicator */}
+        
+
+
+
+
+
+
+
+
         {isTyping && (
           <div className="flex justify-start animate-fade-in">
             <div className="flex space-x-3 max-w-[85%]">

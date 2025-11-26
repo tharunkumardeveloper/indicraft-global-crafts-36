@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Plus, Paperclip, Image, Sparkles } from "lucide-react";
+import { MessageCircle, X, Send, Plus, Paperclip, Image, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -7,7 +7,7 @@ import { ChatSidebar } from "./ChatSidebar";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
 import ChatWelcome from "./ChatWelcome";
-
+import { ttsManager } from "@/utils/tts";
 
 interface Message {
   id: string;
@@ -35,37 +35,12 @@ const ChatInterface = () => {
   const [hasVisitedBefore, setHasVisitedBefore] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isTTSEnabled, setIsTTSEnabled] = useState(true);
 
   const getCurrentMessages = (): Message[] => {
     if (!currentSession) return [];
     const session = sessions.find(s => s.id === currentSession);
     return session?.messages || [];
-  };
-
-  const getBotResponse = (userMessage: string): string => {
-    const lowerMessage = userMessage.toLowerCase();
-    
-    if (lowerMessage.includes("hello") || lowerMessage.includes("hi") || lowerMessage.includes("vanakkam")) {
-      return "Vanakkam! Welcome to Indicraft. I'm Venmathi, here to help you discover authentic Indian handicrafts. What would you like to know about our beautiful products?";
-    }
-    
-    if (lowerMessage.includes("shipping") || lowerMessage.includes("delivery")) {
-      return "We offer worldwide shipping! Delivery typically takes 7-14 business days depending on your location. All items are carefully packaged to ensure they reach you safely. 📦";
-    }
-    
-    if (lowerMessage.includes("authentic") || lowerMessage.includes("genuine")) {
-      return "Every product at Indicraft is 100% authentic, handcrafted by skilled Indian artisans. We work directly with artisan communities to ensure traditional techniques are preserved. Each piece comes with a certificate of authenticity. ✨";
-    }
-    
-    if (lowerMessage.includes("pottery") || lowerMessage.includes("ceramic")) {
-      return "Our pottery collection features beautiful terracotta pieces, decorative bowls, and traditional Indian ceramics. Each piece is hand-thrown and painted by master potters using techniques passed down for generations. 🏺";
-    }
-    
-    if (lowerMessage.includes("textile") || lowerMessage.includes("fabric") || lowerMessage.includes("handloom")) {
-      return "Our handloom textiles include stunning sarees, scarves, and home decor items woven on traditional looms. Each piece showcases intricate patterns and vibrant colors using natural dyes. 🧶";
-    }
-    
-    return "That's a wonderful question! I'd be happy to connect you with our artisan specialists who can provide detailed information. You can also browse our FAQ section or contact us directly for personalized assistance. Is there anything specific about our Indian handicrafts you'd like to explore? 🎨";
   };
 
   const createNewChat = () => {
@@ -77,11 +52,10 @@ const ChatInterface = () => {
       timestamp: new Date(),
       messages: []
     };
-    
     setSessions(prev => [newSession, ...prev]);
     setCurrentSession(newSessionId);
-    setShowWelcome(false); // Don't show welcome for new chat
-    setHasVisitedBefore(true); // Mark as visited
+    setShowWelcome(false);
+    setHasVisitedBefore(true);
   };
 
   const handleSuggestionClick = (suggestionText: string) => {
@@ -108,14 +82,13 @@ const ChatInterface = () => {
 
   const handleSendMessage = async (text: string, imageFile?: File) => {
     if (!text.trim() && !imageFile) return;
-
-    setShowWelcome(false); // Hide welcome when sending message
-    setHasVisitedBefore(true); // Mark as visited
-    setInputValue(""); // Clear input after sending
-
+  
+    setShowWelcome(false);
+    setHasVisitedBefore(true);
+    setInputValue("");
+  
     let sessionId = currentSession;
     if (!sessionId) {
-      // Create a new chat session with initial bot message
       const newSessionId = Date.now().toString();
       const newSession: ChatSession = {
         id: newSessionId,
@@ -129,12 +102,11 @@ const ChatInterface = () => {
           timestamp: new Date()
         }]
       };
-      
       setSessions(prev => [newSession, ...prev]);
       setCurrentSession(newSessionId);
       sessionId = newSessionId;
     }
-
+  
     const userMessage: Message = {
       id: Date.now().toString(),
       text: text.trim(),
@@ -143,7 +115,7 @@ const ChatInterface = () => {
       hasImage: !!imageFile,
       imageUrl: imageFile ? URL.createObjectURL(imageFile) : undefined
     };
-
+  
     setSessions(prev => prev.map(session => {
       if (session.id === sessionId) {
         const updatedMessages = [...session.messages, userMessage];
@@ -156,33 +128,143 @@ const ChatInterface = () => {
       }
       return session;
     }));
-
+  
     setIsTyping(true);
-
-    setTimeout(() => {
-      const botResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        text: getBotResponse(text),
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      
+  
+    try {
+      // 🔹 Get last 3 USER messages only for context
+      const session = sessions.find(s => s.id === sessionId);
+      const lastMessages = session?.messages
+        .filter(m => m.sender === 'user')
+        .slice(-3) || [];
+  
+      const historyContext = lastMessages
+        .map(msg => `User: ${msg.text}`)
+        .join("\n");
+  
+      // 🔹 Detect intent & build a guided prompt
+      function buildPrompt(userMessage: string, history: string): string {
+        const lower = userMessage.toLowerCase();
+        let intent: string;
+  
+        if (lower.includes("password") || lower.includes("login") || lower.includes("account")) {
+          intent = "account_help";
+        } else if (
+          lower.includes("saree") || lower.includes("dress") || 
+          lower.includes("kurta") || lower.includes("buy") || lower.includes("order")
+        ) {
+          intent = "product_help";
+        } else if (
+          lower.includes("hi") || lower.includes("hello") || 
+          lower.includes("good morning") || lower.includes("good evening") || 
+          lower.includes("how are you")
+        ) {
+          intent = "small_talk";
+        } else {
+          intent = "general";
+        }
+  
+        if (intent === "account_help") {
+          return `${history}\nThe user has an **ACCOUNT ISSUE**. Reply only with account-related help.\nUser: ${userMessage}\nBot:`;
+        } else if (intent === "product_help") {
+          return `${history}\nThe user is asking about **PRODUCTS**. Reply only with helpful product-related guidance.\nUser: ${userMessage}\nBot:`;
+        } else if (intent === "small_talk") {
+          return `${history}\nThe user is making small talk — greet them warmly but stay in character.\nUser: ${userMessage}\nBot:`;
+        } else {
+          return `${history}\nRespond politely and helpfully.\nUser: ${userMessage}\nBot:`;
+        }
+      }
+  
+      const fullPrompt = buildPrompt(text, historyContext);
+  
+      const res = await fetch("/ollama/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "venmathi",
+          prompt: fullPrompt,
+          stream: true
+        })
+      });
+  
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      let fullText = "";
+  
+      const botMessageId = (Date.now() + 1).toString();
       setSessions(prev => prev.map(session => {
         if (session.id === sessionId) {
           return {
             ...session,
-            messages: [...session.messages, botResponse]
+            messages: [
+              ...session.messages,
+              {
+                id: botMessageId,
+                text: "",
+                sender: 'bot',
+                timestamp: new Date()
+              }
+            ]
           };
         }
         return session;
       }));
+  
+      let isFirstChunk = true;
+  
+      while (reader) {
+        const { done, value } = await reader.read();
+        if (done) break;
+  
+        const chunk = decoder.decode(value, { stream: true });
+  
+        try {
+          const json = JSON.parse(chunk);
+          if (json.response) {
+            fullText += json.response;
+  
+            if (isFirstChunk) {
+              setIsTyping(false);
+              isFirstChunk = false;
+            }
+  
+            setSessions(prev => prev.map(session => {
+              if (session.id === sessionId) {
+                return {
+                  ...session,
+                  messages: session.messages.map(msg =>
+                    msg.id === botMessageId ? { ...msg, text: fullText } : msg
+                  )
+                };
+              }
+              return session;
+            }));
+
+            // Speak the text as it streams (sentence by sentence)
+            if (isTTSEnabled && json.response) {
+              ttsManager.speakStreaming(json.response, 1.3);
+            }
+          }
+        } catch {
+          // Ignore partial JSON errors
+        }
+      }
+  
+      if (isFirstChunk) {
+        setIsTyping(false);
+      }
+  
+    } catch (err) {
+      console.error("Error calling Ollama:", err);
       setIsTyping(false);
-    }, 1500);
+    }
   };
+  
 
   const openChat = () => {
     setIsOpen(true);
-    // Show welcome screen only if user hasn't visited before and no sessions exist
     if (!hasVisitedBefore && sessions.length === 0) {
       setShowWelcome(true);
     } else {
@@ -193,7 +275,6 @@ const ChatInterface = () => {
     }
   };
 
-  // Show welcome screen based on showWelcome state
   const shouldShowWelcome = showWelcome;
 
   return (
@@ -252,7 +333,6 @@ const ChatInterface = () => {
                     }}
                   />
                 </div>
-                {/* Overlay to close sidebar */}
                 <div 
                   className="absolute inset-0 -z-10" 
                   onClick={() => setIsMobileSidebarOpen(false)}
@@ -262,11 +342,10 @@ const ChatInterface = () => {
 
             {/* Main Chat Area */}
             <div className="flex-1 flex flex-col min-w-0 w-full">
-              {/* Header - Only show when there are active conversations */}
+              {/* Header */}
               {!shouldShowWelcome && (
                 <div className="border-b border-border p-3 sm:p-4 flex items-center justify-between bg-card/50 backdrop-blur-sm">
                   <div className="flex items-center space-x-3">
-                    {/* Mobile hamburger menu */}
                     <Button
                       variant="ghost"
                       size="sm"
@@ -278,27 +357,48 @@ const ChatInterface = () => {
                       </svg>
                     </Button>
                     <div>
-                      <h1 className="font-semibold text-base sm:text-lg text-foreground">
-                        Venmathi
-                      </h1>
+                      <h1 className="font-semibold text-base sm:text-lg text-foreground">Venmathi</h1>
                       <p className="text-xs sm:text-sm text-muted-foreground flex items-center">
                         <span className="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span>
                         Online
                       </p>
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsOpen(false)}
-                    className="hover:bg-accent text-white hover:text-white transition-all duration-200"
-                  >
-                    <X className="h-4 w-4 sm:h-5 sm:w-5" />
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setIsTTSEnabled(!isTTSEnabled);
+                        if (isTTSEnabled) {
+                          ttsManager.stop();
+                        }
+                      }}
+                      className="hover:bg-accent text-white hover:text-white transition-all duration-200"
+                      title={isTTSEnabled ? "Disable voice" : "Enable voice"}
+                    >
+                      {isTTSEnabled ? (
+                        <Volume2 className="h-4 w-4 sm:h-5 sm:w-5" />
+                      ) : (
+                        <VolumeX className="h-4 w-4 sm:h-5 sm:w-5" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setIsOpen(false);
+                        ttsManager.stop();
+                      }}
+                      className="hover:bg-accent text-white hover:text-white transition-all duration-200"
+                    >
+                      <X className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </Button>
+                  </div>
                 </div>
               )}
 
-              {/* Show Welcome Screen or Messages */}
+              {/* Welcome Screen or Messages */}
               {shouldShowWelcome ? (
                 <div className="flex flex-col h-full w-full overflow-hidden">
                   <div className="flex-1 overflow-y-auto">
@@ -329,7 +429,6 @@ const ChatInterface = () => {
               {/* Welcome screen controls */}
               {shouldShowWelcome && (
                 <>
-                  {/* Mobile hamburger menu for welcome screen - Left side */}
                   <Button
                     variant="ghost"
                     size="sm"
@@ -340,8 +439,6 @@ const ChatInterface = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                   </Button>
-                  
-                  {/* Close button - Right side */}
                   <Button
                     variant="ghost"
                     size="sm"

@@ -13,6 +13,7 @@ const Navigation = () => {
     { name: "Shop", path: "/shop" },
     { name: "Stores", path: "/stores" },
     { name: "Artisan Stories", path: "/artisan-stories" },
+    { name: "Buyer Patterns", path: "/buyer-patterns" },
     { name: "Blog", path: "/blog" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },

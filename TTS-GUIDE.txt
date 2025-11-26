@@ -1,0 +1,62 @@
+========================================
+TEXT-TO-SPEECH (TTS) SETUP - COMPLETE
+========================================
+
+✅ FEATURES ADDED:
+1. Natural female voice using Web Speech API (built into browser)
+2. Fast speech rate (1.3x normal speed) for quick responses
+3. Streaming TTS - speaks as the AI generates text
+4. Toggle button to enable/disable voice
+5. Optimized model for faster responses
+
+========================================
+HOW TO USE:
+========================================
+
+1. Run: run.bat (or manually start ollama serve + npm run dev)
+
+2. Open: http://localhost:8080/ (or 8081 if 8080 is busy)
+
+3. Click the chat button (bottom-right)
+
+4. Start chatting - the AI will respond with voice!
+
+5. Toggle voice on/off using the speaker icon in the header
+
+========================================
+VOICE SETTINGS:
+========================================
+
+The system automatically selects the best available voice:
+- Prefers: Microsoft Zira, Aria, or Google US English Female
+- Fallback: Any English female voice
+- Speed: 1.3x (slightly faster than normal)
+
+To change voice settings, edit: src/utils/tts.ts
+
+========================================
+MODEL OPTIMIZATIONS:
+========================================
+
+The venmathi model is optimized for speed:
+- Context: 2048 tokens (reduced from 4096)
+- Max response: 256 tokens (keeps answers concise)
+- Temperature: 0.7 (balanced creativity)
+- Based on: llama3.2:1b (fastest, lightest model)
+
+========================================
+TROUBLESHOOTING:
+========================================
+
+If voice doesn't work:
+1. Check browser permissions (allow audio)
+2. Try Chrome/Edge (best TTS support)
+3. Check speaker icon is enabled (not muted)
+4. Open browser console (F12) for errors
+
+If responses are slow:
+1. Close other applications
+2. Model is already optimized for speed
+3. First response is slower (model loading)
+
+========================================

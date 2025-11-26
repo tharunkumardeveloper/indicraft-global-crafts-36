@@ -15,6 +15,7 @@ import Blog from "./pages/Blog";
 import HandloomTextiles from "./pages/shop/HandloomTextiles";
 import NotFound from "./pages/NotFound";
 import LogoProcessor from "./components/LogoProcessor";
+import BuyerPatterns from "./pages/BuyerPatterns";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/buyer-patterns" element={<BuyerPatterns />} />
             <Route path="/logo-processor" element={<LogoProcessor />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

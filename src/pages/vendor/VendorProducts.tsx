@@ -20,7 +20,7 @@ const VendorProducts = () => {
       stock: 25,
       status: "active",
       orders: 18,
-      image: "/src/assets/hero-artisan.jpg",
+      image: "/product/traditional terracotta diyas set.webp",
       dateAdded: "2024-01-15"
     },
     {
@@ -31,7 +31,7 @@ const VendorProducts = () => {
       stock: 12,
       status: "active",
       orders: 8,
-      image: "/src/assets/hero-artisan.jpg",
+      image: "/product/terracotta water pot.webp",
       dateAdded: "2024-01-10"
     },
     {
@@ -42,7 +42,7 @@ const VendorProducts = () => {
       stock: 0,
       status: "out_of_stock",
       orders: 15,
-      image: "/src/assets/products-collection.jpg",
+      image: "/product/decorative terracotta vase.jpg",
       dateAdded: "2024-01-05"
     },
     {
@@ -53,7 +53,7 @@ const VendorProducts = () => {
       stock: 8,
       status: "low_stock",
       orders: 12,
-      image: "/src/assets/hero-artisan.jpg",
+      image: "/product/clay cooking pot set.webp",
       dateAdded: "2023-12-28"
     },
     {
@@ -64,7 +64,7 @@ const VendorProducts = () => {
       stock: 35,
       status: "active",
       orders: 25,
-      image: "/src/assets/products-collection.jpg",
+      image: "/product/brass diya with stand.webp",
       dateAdded: "2023-12-20"
     }
   ];

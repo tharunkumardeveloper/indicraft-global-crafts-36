@@ -43,21 +43,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       name: 'Priya Sharma',
       email: 'customer@indicraft.com',
       role: 'customer' as UserRole,
-      avatar: '/src/assets/hero-artisan.jpg'
+      avatar: '/product/kanchipuram silk saree.webp'
     },
     vendor: {
       id: '2',
       name: 'Ravi Kumar',
       email: 'vendor@indicraft.com',
       role: 'vendor' as UserRole,
-      avatar: '/src/assets/handloom-weaving.jpg'
+      avatar: '/product/terracotta water pot.webp'
     },
     admin: {
       id: '3',
       name: 'Admin User',
       email: 'admin@indicraft.com',
       role: 'admin' as UserRole,
-      avatar: '/src/assets/products-collection.jpg'
+      avatar: '/product/brass pooja thali set.webp'
     }
   };
 

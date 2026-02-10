@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -6,9 +7,21 @@ import { User, Store, Shield, Sparkles, Heart, Star } from "lucide-react";
 import indicraftLogo from "@/assets/indicraft-decorative-pot.png";
 
 const LoginPage = () => {
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, isAuthenticated, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const redirectMap = {
+        customer: '/',
+        vendor: '/vendor/dashboard',
+        admin: '/admin/dashboard'
+      };
+      navigate(redirectMap[user.role], { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleRoleLogin = async (role: 'customer' | 'vendor' | 'admin') => {
     const credentials = {
@@ -24,7 +37,8 @@ const LoginPage = () => {
         title: "स्वागत है! Welcome!",
         description: `Logged in successfully as ${role}`,
       });
-      navigate(credentials[role].redirect);
+      // Use replace to prevent going back to login page
+      navigate(credentials[role].redirect, { replace: true });
     } else {
       toast({
         title: "Login Failed",

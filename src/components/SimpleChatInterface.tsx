@@ -49,10 +49,10 @@ const SimpleChatInterface = ({ isOpen, onClose }: SimpleChatInterfaceProps) => {
 
   // Sample product data for recommendations
   const sampleProducts: ProductRecommendation[] = [
-    { id: 1, name: "Kanchipuram Silk Saree", price: "₹6,800", category: "Handwoven Sarees", image: "/src/assets/handloom-weaving.jpg" },
-    { id: 4, name: "Terracotta Diyas Set", price: "₹450", category: "Terracotta Items", image: "/src/assets/hero-artisan.jpg" },
-    { id: 7, name: "Wooden Toys Set", price: "₹950", category: "Wooden Toys", image: "/src/assets/woodcraft.jpg" },
-    { id: 10, name: "Brass Pooja Thali", price: "₹2,200", category: "Brass Items", image: "/src/assets/products-collection.jpg" }
+    { id: 1, name: "Kanchipuram Silk Saree", price: "₹6,800", category: "Handwoven Sarees", image: "/product/kanchipuram silk saree.webp" },
+    { id: 4, name: "Terracotta Diyas Set", price: "₹450", category: "Terracotta Items", image: "/product/traditional terracotta diyas set.webp" },
+    { id: 7, name: "Wooden Toys Set", price: "₹950", category: "Wooden Toys", image: "/product/channapatna wooden toys set.webp" },
+    { id: 10, name: "Brass Pooja Thali", price: "₹2,200", category: "Brass Items", image: "/product/brass pooja thali set.webp" }
   ];
 
   const scrollToBottom = () => {

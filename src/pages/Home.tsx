@@ -203,6 +203,122 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Meet Our Artisans Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-sanskrit text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Meet Our Master Artisans
+            </h2>
+            <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto">
+              Discover the talented craftspeople behind our beautiful products. Each artisan 
+              brings generations of skill and cultural heritage to their craft.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <Link to="/artisan/1">
+              <Card className="group cursor-pointer hover:shadow-warm transition-all duration-300">
+                <CardContent className="p-0">
+                  <div className="relative overflow-hidden rounded-t-lg">
+                    <img 
+                      src="/product/kanchipuram silk saree.webp" 
+                      alt="Meera Devi - Silk Weaver"
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                      <h3 className="font-sanskrit text-lg font-bold text-white">Meera Devi</h3>
+                      <p className="text-white/90 text-sm">Silk Weaver, Tamil Nadu</p>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Master weaver specializing in traditional Kanchipuram silk sarees with 25 years of experience.
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
+                        <span className="text-sm">4.9</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">45 products</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/artisan/3">
+              <Card className="group cursor-pointer hover:shadow-warm transition-all duration-300">
+                <CardContent className="p-0">
+                  <div className="relative overflow-hidden rounded-t-lg">
+                    <img 
+                      src="/product/channapatna wooden toys set.webp" 
+                      alt="Lakshmi Bai - Toy Maker"
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                      <h3 className="font-sanskrit text-lg font-bold text-white">Lakshmi Bai</h3>
+                      <p className="text-white/90 text-sm">Toy Maker, Karnataka</p>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Expert in creating colorful Channapatna wooden toys using traditional lacquer work.
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
+                        <span className="text-sm">4.7</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">52 products</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/artisan/4">
+              <Card className="group cursor-pointer hover:shadow-warm transition-all duration-300">
+                <CardContent className="p-0">
+                  <div className="relative overflow-hidden rounded-t-lg">
+                    <img 
+                      src="/product/brass pooja thali set.webp" 
+                      alt="Arjun Sharma - Brass Worker"
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                      <h3 className="font-sanskrit text-lg font-bold text-white">Arjun Sharma</h3>
+                      <p className="text-white/90 text-sm">Brass Worker, Uttar Pradesh</p>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Master craftsman specializing in traditional brass items with 30 years of experience.
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
+                        <span className="text-sm">4.9</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">41 products</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+
+          <div className="text-center">
+            <Button asChild className="bg-gradient-heritage">
+              <Link to="/artisans">
+                Meet All Our Artisans
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Customer Testimonial Section */}
       <section className="py-20 bg-gradient-earth">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

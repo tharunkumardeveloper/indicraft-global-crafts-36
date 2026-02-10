@@ -3,78 +3,10 @@ import { ArrowRight, Star, Truck, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import handloomImage from "@/assets/handloom-weaving.jpg";
-import potteryImage from "@/assets/hero-artisan.jpg";
-import woodcraftImage from "@/assets/woodcraft.jpg";
-import productsImage from "@/assets/products-collection.jpg";
+import { products, categories } from "@/data/products";
+import { getArtisanIdByName } from "@/data/artisans";
 
 const Shop = () => {
-  const products = [
-    // Handwoven Sarees
-    { id: 1, name: "Kanchipuram Silk Saree - Royal Blue", price: "₹6,800", category: "Handwoven Sarees", image: handloomImage, description: "Traditional silk saree with intricate gold border", artisan: "Meera Devi", featured: true },
-    { id: 2, name: "Banarasi Silk Saree - Emerald Green", price: "₹5,200", category: "Handwoven Sarees", image: productsImage, description: "Handwoven silk with traditional motifs", artisan: "Priya Sharma" },
-    { id: 3, name: "Cotton Handloom Saree - Pink", price: "₹2,400", category: "Handwoven Sarees", image: handloomImage, description: "Soft cotton saree with natural dyes", artisan: "Kamala Devi" },
-    
-    // Terracotta Items
-    { id: 4, name: "Traditional Terracotta Diyas Set", price: "₹450", category: "Terracotta Items", image: potteryImage, description: "Handcrafted oil lamps for festivals", artisan: "Ravi Kumar", featured: true },
-    { id: 5, name: "Terracotta Water Pot - Large", price: "₹1,200", category: "Terracotta Items", image: potteryImage, description: "Traditional water storage pot", artisan: "Ravi Kumar" },
-    { id: 6, name: "Decorative Terracotta Vase", price: "₹800", category: "Terracotta Items", image: productsImage, description: "Beautiful vase with tribal patterns", artisan: "Suresh Das" },
-    
-    // Wooden Toys
-    { id: 7, name: "Channapatna Wooden Toys Set", price: "₹950", category: "Wooden Toys", image: woodcraftImage, description: "Colorful traditional wooden toys", artisan: "Lakshmi Bai", featured: true },
-    { id: 8, name: "Wooden Rocking Horse", price: "₹1,800", category: "Wooden Toys", image: woodcraftImage, description: "Hand-carved rocking horse", artisan: "Lakshmi Bai" },
-    { id: 9, name: "Traditional Wooden Puzzle", price: "₹600", category: "Wooden Toys", image: woodcraftImage, description: "Educational wooden puzzle game", artisan: "Suresh Chandra" },
-    
-    // Brass Puja Items
-    { id: 10, name: "Brass Pooja Thali Set", price: "₹2,200", category: "Brass Puja Items", image: productsImage, description: "Complete brass worship set", artisan: "Arjun Sharma", featured: true },
-    { id: 11, name: "Brass Diya with Stand", price: "₹1,100", category: "Brass Puja Items", image: handloomImage, description: "Traditional brass lamp", artisan: "Arjun Sharma" },
-    { id: 12, name: "Brass Incense Holder", price: "₹750", category: "Brass Puja Items", image: productsImage, description: "Ornate incense stick holder", artisan: "Arjun Sharma" },
-    
-    // Block-printed Scarves
-    { id: 13, name: "Block Printed Silk Scarf - Blue", price: "₹1,650", category: "Block-printed Scarves", image: handloomImage, description: "Hand block printed silk scarf", artisan: "Priya Patel", featured: true },
-    { id: 14, name: "Cotton Block Print Dupatta", price: "₹900", category: "Block-printed Scarves", image: productsImage, description: "Traditional block printed dupatta", artisan: "Priya Sharma" },
-    { id: 15, name: "Kalamkari Print Stole", price: "₹1,200", category: "Block-printed Scarves", image: handloomImage, description: "Hand-painted Kalamkari stole", artisan: "Priya Patel" },
-    
-    // Handmade Journals
-    { id: 16, name: "Handmade Paper Journal - Large", price: "₹800", category: "Handmade Journals", image: productsImage, description: "Eco-friendly handmade paper journal", artisan: "Suresh Das", featured: true },
-    { id: 17, name: "Leather Bound Diary", price: "₹1,200", category: "Handmade Journals", image: handloomImage, description: "Traditional leather diary", artisan: "Anita Devi" },
-    { id: 18, name: "Recycled Paper Notebook Set", price: "₹450", category: "Handmade Journals", image: productsImage, description: "Set of eco-friendly notebooks", artisan: "Suresh Das" },
-    
-    // Jute Bags
-    { id: 19, name: "Embroidered Jute Tote Bag", price: "₹650", category: "Jute Bags", image: handloomImage, description: "Eco-friendly jute bag with embroidery", artisan: "Kamala Devi" },
-    { id: 20, name: "Jute Shopping Bag - Large", price: "₹400", category: "Jute Bags", image: productsImage, description: "Sturdy jute shopping bag", artisan: "Priya Patel" },
-    { id: 21, name: "Jute Lunch Bag", price: "₹350", category: "Jute Bags", image: handloomImage, description: "Insulated jute lunch bag", artisan: "Anita Devi" },
-    
-    // Clay Kitchenware
-    { id: 22, name: "Clay Cooking Pot Set", price: "₹1,800", category: "Clay Kitchenware", image: potteryImage, description: "Traditional clay cooking pots", artisan: "Ravi Kumar" },
-    { id: 23, name: "Clay Water Bottles", price: "₹600", category: "Clay Kitchenware", image: potteryImage, description: "Natural clay water bottles", artisan: "Ravi Kumar" },
-    { id: 24, name: "Earthenware Dinner Set", price: "₹2,400", category: "Clay Kitchenware", image: productsImage, description: "Complete clay dinner set", artisan: "Suresh Das" },
-    
-    // Palm Leaf Items
-    { id: 25, name: "Palm Leaf Storage Baskets", price: "₹750", category: "Palm Leaf Items", image: handloomImage, description: "Set of woven palm leaf baskets", artisan: "Suresh Chandra" },
-    { id: 26, name: "Palm Leaf Wall Hanging", price: "₹900", category: "Palm Leaf Items", image: productsImage, description: "Decorative palm leaf art", artisan: "Anita Devi" },
-    { id: 27, name: "Palm Leaf Table Mats", price: "₹450", category: "Palm Leaf Items", image: handloomImage, description: "Set of eco-friendly table mats", artisan: "Suresh Chandra" },
-    
-    // Additional Items
-    { id: 28, name: "Hand-painted Coasters Set", price: "₹550", category: "Home Décor", image: productsImage, description: "Wooden coasters with traditional art", artisan: "Lakshmi Bai" },
-    { id: 29, name: "Tribal Silver Jewelry Set", price: "₹3,200", category: "Jewelry", image: handloomImage, description: "Traditional tribal silver ornaments", artisan: "Anita Devi" },
-    { id: 30, name: "Bamboo Table Lamp", price: "₹1,400", category: "Home Décor", image: woodcraftImage, description: "Eco-friendly bamboo lamp", artisan: "Anita Devi" }
-  ];
-
-  const categories = [
-    "All Products",
-    "Handwoven Sarees", 
-    "Terracotta Items",
-    "Wooden Toys",
-    "Brass Puja Items", 
-    "Block-printed Scarves",
-    "Handmade Journals",
-    "Jute Bags",
-    "Clay Kitchenware",
-    "Palm Leaf Items",
-    "Home Décor",
-    "Jewelry"
-  ];
 
   const features = [
     {
@@ -156,7 +88,7 @@ const Shop = () => {
               Handcrafted Indian Products
             </h2>
             <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto">
-              Discover 30 authentic handcrafted treasures from skilled artisans across India. 
+              Discover {products.length} authentic handcrafted treasures from skilled artisans across India. 
               Each piece tells a story of tradition, skill, and cultural heritage.
             </p>
           </div>
@@ -203,7 +135,18 @@ const Shop = () => {
                     </p>
                     
                     <p className="text-xs text-primary mb-3">
-                      By {product.artisan}
+                      By{" "}
+                      {getArtisanIdByName(product.artisan) ? (
+                        <Link 
+                          to={`/artisan/${getArtisanIdByName(product.artisan)}`}
+                          className="hover:underline"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {product.artisan}
+                        </Link>
+                      ) : (
+                        product.artisan
+                      )}
                     </p>
                     
                     <div className="flex items-center justify-between mb-3">
@@ -212,7 +155,7 @@ const Shop = () => {
                       </span>
                       <div className="flex items-center text-xs text-muted-foreground">
                         <Star className="h-3 w-3 text-yellow-500 fill-current mr-1" />
-                        4.8
+                        {product.rating || 4.5}
                       </div>
                     </div>
                     
@@ -221,7 +164,7 @@ const Shop = () => {
                       className="w-full bg-gradient-heritage text-xs"
                       asChild
                     >
-                      <Link to={`/product/${product.id}`} target="_blank" rel="noopener noreferrer">
+                      <Link to={`/product/${product.id}`}>
                         View Details
                         <ArrowRight className="ml-2 h-3 w-3" />
                       </Link>

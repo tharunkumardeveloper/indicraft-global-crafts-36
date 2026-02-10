@@ -1,24 +1,64 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import indicraftDecorativePot from "@/assets/indicraft-decorative-pot.png";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user, logout, isAuthenticated } = useAuth();
 
-  const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    { name: "Stores", path: "/stores" },
-    { name: "Artisan Stories", path: "/artisan-stories" },
-    { name: "Buyer Patterns", path: "/buyer-patterns" },
-    { name: "Blog", path: "/blog" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
-    { name: "FAQ", path: "/faq" },
-  ];
+  const getNavItems = () => {
+    if (!isAuthenticated) {
+      return [
+        { name: "Home", path: "/" },
+        { name: "Shop", path: "/shop" },
+        { name: "Artisans", path: "/artisans" },
+        { name: "Stores", path: "/stores" },
+        { name: "Blog", path: "/blog" },
+        { name: "About", path: "/about" },
+        { name: "Contact", path: "/contact" },
+        { name: "FAQ", path: "/faq" },
+      ];
+    }
+
+    switch (user?.role) {
+      case 'customer':
+        return [
+          { name: "Home", path: "/" },
+          { name: "Shop", path: "/shop" },
+          { name: "Artisans", path: "/artisans" },
+          { name: "Stores", path: "/stores" },
+          { name: "Blog", path: "/blog" },
+          { name: "About", path: "/about" },
+          { name: "Contact", path: "/contact" },
+          { name: "FAQ", path: "/faq" },
+        ];
+      case 'vendor':
+        return [
+          { name: "Dashboard", path: "/vendor/dashboard" },
+          { name: "Products", path: "/vendor/products" },
+          { name: "Orders", path: "/vendor/orders" },
+          { name: "Analytics", path: "/vendor/analytics" },
+          { name: "Store Locator", path: "/vendor/centre-locator" },
+          { name: "Profile", path: "/vendor/profile" },
+        ];
+      case 'admin':
+        return [
+          { name: "Dashboard", path: "/admin/dashboard" },
+          { name: "Buyer Patterns", path: "/buyer-patterns" },
+          { name: "Dataset", path: "/admin/dataset" },
+          { name: "Users", path: "/admin/users" },
+          { name: "Analytics", path: "/admin/analytics" },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const navItems = getNavItems();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -54,10 +94,32 @@ const Navigation = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* User Menu */}
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <User className="w-4 h-4" />
+                  <span className="text-sm font-medium">{user?.name}</span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={logout}>
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : (
+              <Button asChild>
+                <Link to="/login">Login</Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            {isAuthenticated && (
+              <Button variant="ghost" size="sm" onClick={logout}>
+                <LogOut className="h-4 w-4" />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
@@ -86,6 +148,22 @@ const Navigation = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {isAuthenticated && (
+              <div className="px-4 py-3 border-t border-border/10 mt-4">
+                <p className="text-sm text-muted-foreground mb-2">Signed in as</p>
+                <p className="font-medium">{user?.name}</p>
+                <p className="text-sm text-muted-foreground capitalize">{user?.role}</p>
+              </div>
+            )}
+            
+            {!isAuthenticated && (
+              <div className="px-4 py-3 border-t border-border/10 mt-4">
+                <Button asChild className="w-full">
+                  <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>

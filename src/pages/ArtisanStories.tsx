@@ -176,10 +176,22 @@ const ArtisanStories = () => {
           <h1 className="font-sanskrit text-4xl lg:text-5xl font-bold text-foreground mb-6">
             Stories of Empowerment
           </h1>
-          <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
             Discover inspiring journeys of artisans who transformed their lives through craft, 
             determination, and community support. These are stories of resilience, tradition, and empowerment.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild className="bg-gradient-heritage">
+              <Link to="/artisans">
+                Meet Our Artisans
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/shop">
+                Shop Their Products
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
